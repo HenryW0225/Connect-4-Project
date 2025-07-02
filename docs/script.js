@@ -33,6 +33,7 @@ topRowCells.forEach(cell => {
             if (!cellToFill.classList.contains('red') && !cellToFill.classList.contains('yellow')) {
                 cellToFill.classList.add('red');
                 playerTurn = false;
+                //if (check_winner(row, col))
                 botMove();
                 break;
                 

@@ -4,7 +4,7 @@ from flask_cors import CORS
 import joblib
 
 app = Flask(__name__)
-CORS(app)  
+CORS(app, origins=["https://HenryW0225.github.io", "https://connect-4-project.onrender.com"])
 
 model = joblib.load('connect4_model.pkl')
 
