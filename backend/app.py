@@ -18,7 +18,9 @@ def predict():
         ROWS, COLS = 6, 7
 
         def can_place(col):
-                return board[col] is None or board[col] == 0
+                top_idx = col
+                return board[top_idx] == 0 or board[top_idx] is None
+
 
         def place_disc(board_state, col, player_val):
                 new_board = board_state[:]
@@ -29,16 +31,16 @@ def predict():
                                 break
                 return new_board
 
-        player_val = 2  
+        player_val = -1  
         best_move = None
-        best_score = -float('inf')
+        best_score = float('inf')
 
         for col in range(COLS):
                 if not can_place(col):
                         continue
                 simulated_board = place_disc(board, col, player_val)
-                prediction = model.predict_proba([simulated_board])[0][1]
-                if prediction > best_score:
+                prediction = model.predict_proba([simulated_board])[0][2]
+                if prediction < best_score:
                         best_score = prediction
                         best_move = col
 

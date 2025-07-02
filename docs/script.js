@@ -1,5 +1,6 @@
 const gameBoard = document.getElementById('gameBoard');
 const restartBtn = document.getElementById('restartBtn');
+const message = document.querySelector('p');
 
 const BASE_URL = location.hostname === 'localhost'
   ? 'http://localhost:5000'
@@ -7,6 +8,7 @@ const BASE_URL = location.hostname === 'localhost'
 
 const ROWS = 6;
 const COLS = 7;
+let botTimer;
 
 for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
@@ -33,7 +35,11 @@ topRowCells.forEach(cell => {
             if (!cellToFill.classList.contains('red') && !cellToFill.classList.contains('yellow')) {
                 cellToFill.classList.add('red');
                 playerTurn = false;
-                //if (check_winner(row, col))
+                if (check_winner(row, col)) {
+                    message.textContent = "You Win!";
+                    return;
+                }
+                message.textContent = "Bot's Turn";
                 botMove();
                 break;
                 
@@ -82,7 +88,7 @@ function botMove() {
         for (let col = 0; col < COLS; col++) {
             const cell = document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
             if (cell.classList.contains('red')) board.push(1);
-            else if (cell.classList.contains('yellow')) board.push(2);
+            else if (cell.classList.contains('yellow')) board.push(-1);
             else board.push(0);
         }
     }
@@ -98,8 +104,15 @@ function botMove() {
         for (let row = ROWS - 1; row >= 0; row--) {
             const cellToFill = document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
             if (!cellToFill.classList.contains('red') && !cellToFill.classList.contains('yellow')) {
-                cellToFill.classList.add('yellow');
-                playerTurn = true;
+                botTimer = setTimeout(() => {
+                    cellToFill.classList.add('yellow');
+                    if (check_winner(row, col)) {
+                        message.textContent = "Bot Wins!";
+                        clearTimeout(botTimer);
+                    }
+                    playerTurn = true;
+                    message.textContent = "Your turn!";
+                }, 1000);
                 break;
             }
         }
@@ -115,7 +128,9 @@ restartBtn.addEventListener('click', () => {
     cells.forEach(cell => {
         cell.classList.remove('red', 'yellow');
     });
+    clearTimeout(botTimer);
     playerTurn = true;
+    message.textContent = "Your turn first!";
 });
 
 
