@@ -3,7 +3,7 @@ const restartBtn = document.getElementById('restartBtn');
 
 const BASE_URL = location.hostname === 'localhost'
   ? 'http://localhost:5000'
-  : 'https://your-render-backend-url.onrender.com';
+  : 'https://connect-4-project.onrender.com';
 
 const ROWS = 6;
 const COLS = 7;
