@@ -108,6 +108,7 @@ function botMove() {
                     if (check_winner(row, col)) {
                         message.textContent = "Bot Wins!";
                         clearTimeout(botTimer);
+                        return;
                     }
                     playerTurn = true;
                     message.textContent = "Your turn!";
