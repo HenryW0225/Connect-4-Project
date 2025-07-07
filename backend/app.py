@@ -12,20 +12,13 @@ model = joblib.load('connect4_model.pkl')
 def predict():
         data = request.get_json()
         board = data.get('board', None)  
-        if board is None or len(board) != 42:
-                return jsonify({'error': 'Invalid board data'}), 400
 
         ROWS, COLS = 6, 7
 
-        def can_place(col):
-                top_idx = col
-                return board[top_idx] == 0 or board[top_idx] is None
-
-
-        def place_disc(board_state, col, player_val):
-                new_board = board_state[:]
-                for row in range(ROWS-1, -1, -1):
-                        idx = row * COLS + col
+        def place_disc(board, col, player_val):
+                new_board = board[:]
+                for row in range(ROWS):
+                        idx = col * ROWS + row
                         if new_board[idx] == 0 or new_board[idx] is None:
                                 new_board[idx] = player_val
                                 break
@@ -33,14 +26,14 @@ def predict():
 
         player_val = -1  
         best_move = None
-        best_score = float('inf')
+        best_score = -float('inf')
 
         for col in range(COLS):
-                if not can_place(col):
+                if board[(col + 1) * ROWS - 1] != 0:
                         continue
                 simulated_board = place_disc(board, col, player_val)
-                prediction = model.predict_proba([simulated_board])[0][2]
-                if prediction < best_score:
+                prediction = model.predict_proba([simulated_board])[0][0] - model.predict_proba([simulated_board])[0][2]
+                if prediction > best_score:
                         best_score = prediction
                         best_move = col
 

@@ -84,15 +84,14 @@ function check_winner(x, y) {
 
 function botMove() {
     const board = [];
-    for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
+    for (let col = 0; col < COLS; col++) {
+        for (let row = ROWS-1; row > -1; row--) {
             const cell = document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
             if (cell.classList.contains('red')) board.push(1);
             else if (cell.classList.contains('yellow')) board.push(-1);
             else board.push(0);
         }
     }
-
     fetch(`${BASE_URL}/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
