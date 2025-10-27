@@ -24,9 +24,9 @@ let playerTurn = true;
 
 const cells = document.querySelectorAll('#gameBoard .cell');
 
-const topRowCells = document.querySelectorAll(`.cell[data-row='0']`);
+//const topRowCells = document.querySelectorAll(`.cell[data-row='0']`);
 
-topRowCells.forEach(cell => {
+cells.forEach(cell => {
     cell.addEventListener('click', (event) => {
         if (!playerTurn) { return };
         const col = parseInt(event.target.dataset.col);
